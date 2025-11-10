@@ -13,10 +13,12 @@ function EditProduct() {
     price: '',
   });
 
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const res = await fetch(`/api/products/${id}`, {
+        const res = await fetch(`${API_BASE_URL}/api/products/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
@@ -31,7 +33,7 @@ function EditProduct() {
     };
 
     fetchProduct();
-  }, [id, token]);
+  }, [id, token, API_BASE_URL]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -40,7 +42,7 @@ function EditProduct() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`/api/products/edit/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/products/edit/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

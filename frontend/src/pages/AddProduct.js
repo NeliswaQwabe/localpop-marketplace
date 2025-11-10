@@ -5,6 +5,7 @@ import { AuthContext } from '../context/AuthContext';
 function AddProduct() {
   const { token } = useContext(AuthContext);
   const navigate = useNavigate();
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -27,7 +28,7 @@ function AddProduct() {
     if (image) formData.append('image', image);
 
     try {
-      const res = await fetch('/api/products/add', {
+      const res = await fetch(`${API_BASE_URL}/api/products/add`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` },
         body: formData,

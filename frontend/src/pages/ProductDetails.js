@@ -11,10 +11,12 @@ function ProductDetails() {
   const [related, setRelated] = useState([]);
   const [error, setError] = useState('');
 
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const res = await fetch(`/api/products/${id}`, {
+        const res = await fetch(`${API_BASE_URL}/api/products/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
@@ -27,7 +29,7 @@ function ProductDetails() {
 
     const fetchReviews = async () => {
       try {
-        const res = await fetch(`/api/reviews/${id}`);
+        const res = await fetch(`${API_BASE_URL}/api/reviews/${id}`);
         const data = await res.json();
         setReviews(Array.isArray(data) ? data : []);
       } catch (err) {
@@ -37,7 +39,7 @@ function ProductDetails() {
 
     const fetchRelated = async () => {
       try {
-        const res = await fetch(`/api/products/related/${id}`);
+        const res = await fetch(`${API_BASE_URL}/api/products/related/${id}`);
         const data = await res.json();
         setRelated(Array.isArray(data) ? data : []);
       } catch (err) {
@@ -48,11 +50,11 @@ function ProductDetails() {
     fetchProduct();
     fetchReviews();
     fetchRelated();
-  }, [id, token]);
+  }, [id, token, API_BASE_URL]);
 
   const handleBuy = async () => {
     try {
-      const res = await fetch('/api/payment/initiate', {
+      const res = await fetch(`${API_BASE_URL}/api/payment/initiate`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -126,7 +128,7 @@ function ProductDetails() {
                     if (!reply) return;
 
                     try {
-                      const res = await fetch(`/api/reviews/reply/${r._id}`, {
+                      const res = await fetch(`${API_BASE_URL}/api/reviews/reply/${r._id}`, {
                         method: 'POST',
                         headers: {
                           'Content-Type': 'application/json',

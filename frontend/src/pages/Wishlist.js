@@ -7,10 +7,12 @@ function Wishlist() {
   const [wishlist, setWishlist] = useState([]);
   const navigate = useNavigate();
 
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
   useEffect(() => {
     const fetchWishlist = async () => {
       try {
-        const res = await fetch('/api/wishlist', {
+        const res = await fetch(`${API_BASE_URL}/api/wishlist`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
@@ -21,11 +23,11 @@ function Wishlist() {
     };
 
     if (user?.role === 'buyer') fetchWishlist();
-  }, [token, user]);
+  }, [token, user, API_BASE_URL]);
 
   const handleRemove = async (id) => {
     try {
-      const res = await fetch(`/api/wishlist/remove/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/wishlist/remove/${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });

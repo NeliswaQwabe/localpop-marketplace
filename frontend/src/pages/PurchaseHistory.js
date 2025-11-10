@@ -6,10 +6,12 @@ function PurchaseHistory() {
   const [error, setError] = useState('');
   const { token, user } = useContext(AuthContext);
 
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
   useEffect(() => {
     const fetchPurchases = async () => {
       try {
-        const res = await fetch('/api/purchase/my-purchases', {
+        const res = await fetch(`${API_BASE_URL}/api/purchase/my-purchases`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
@@ -23,7 +25,7 @@ function PurchaseHistory() {
     if (user?.role === 'buyer') {
       fetchPurchases();
     }
-  }, [token, user]);
+  }, [token, user, API_BASE_URL]);
 
   return (
     <div className="min-h-screen px-4 py-8">

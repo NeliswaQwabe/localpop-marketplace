@@ -19,10 +19,12 @@ function AdminDashboard() {
   const [stats, setStats] = useState({ userCount: 0, productCount: 0, purchaseCount: 0 });
   const [error, setError] = useState('');
 
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await fetch('/api/admin/users', {
+        const res = await fetch(`${API_BASE_URL}/api/admin/users`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
@@ -35,7 +37,7 @@ function AdminDashboard() {
 
     const fetchStats = async () => {
       try {
-        const res = await fetch('/api/admin/stats', {
+        const res = await fetch(`${API_BASE_URL}/api/admin/stats`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
@@ -47,12 +49,12 @@ function AdminDashboard() {
 
     fetchUsers();
     fetchStats();
-  }, [token]);
+  }, [token, API_BASE_URL]);
 
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this user?')) return;
     try {
-      const res = await fetch(`/api/admin/users/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/admin/users/${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -69,7 +71,7 @@ function AdminDashboard() {
 
   const handleRoleChange = async (id, newRole) => {
     try {
-      const res = await fetch(`/api/admin/users/${id}/role`, {
+      const res = await fetch(`${API_BASE_URL}/api/admin/users/${id}/role`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

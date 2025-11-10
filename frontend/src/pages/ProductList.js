@@ -10,10 +10,12 @@ function ProductList() {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
 
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch('/api/products', {
+        const res = await fetch(`${API_BASE_URL}/api/products`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
@@ -25,7 +27,7 @@ function ProductList() {
     };
 
     fetchProducts();
-  }, [token]);
+  }, [token, API_BASE_URL]);
 
   useEffect(() => {
     const fetchRatings = async () => {
@@ -33,7 +35,7 @@ function ProductList() {
       await Promise.all(
         products.map(async (p) => {
           try {
-            const res = await fetch(`/api/reviews/average/${p._id}`);
+            const res = await fetch(`${API_BASE_URL}/api/reviews/average/${p._id}`);
             const data = await res.json();
             results[p._id] = data;
           } catch {
@@ -47,7 +49,7 @@ function ProductList() {
     if (products.length > 0) {
       fetchRatings();
     }
-  }, [products]);
+  }, [products, API_BASE_URL]);
 
   const filteredProducts = products.filter((p) => {
     const matchesCategory = selectedCategory === 'All' || p.category === selectedCategory;
@@ -57,29 +59,29 @@ function ProductList() {
     return matchesCategory && matchesSearch;
   });
 
- const handleBuy = async (productId) => {
-  try {
-    const res = await fetch('/api/payment/initiate', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ productId }),
-    });
+  const handleBuy = async (productId) => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/payment/initiate`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ productId }),
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (res.ok && data.redirectUrl) {
-      window.location.href = data.redirectUrl; // ✅ Redirect to Payfast
-    } else {
-      alert(data.message || 'Purchase failed.');
+      if (res.ok && data.redirectUrl) {
+        window.location.href = data.redirectUrl;
+      } else {
+        alert(data.message || 'Purchase failed.');
+      }
+    } catch (err) {
+      console.error('Buy error:', err);
+      alert('Error occurred.');
     }
-  } catch (err) {
-    console.error('Buy error:', err);
-    alert('Error occurred.');
-  }
-};
+  };
 
   const handleReview = async (productId) => {
     const rating = prompt('Rate this product (1–5):');
@@ -91,7 +93,7 @@ function ProductList() {
     const comment = prompt('Leave a comment (optional):');
 
     try {
-      const res = await fetch(`/api/reviews/${productId}`, {
+      const res = await fetch(`${API_BASE_URL}/api/reviews/${productId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -114,7 +116,7 @@ function ProductList() {
 
   const handleWishlist = async (productId) => {
     try {
-      const res = await fetch(`/api/wishlist/${productId}`, {
+      const res = await fetch(`${API_BASE_URL}/api/wishlist/${productId}`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -185,12 +187,12 @@ function ProductList() {
                 />
               )}
               <Link
-  to={`/product/${product._id}`}
-  title={`View details for ${product.name}`}
-  className="block mt-4 text-blue-600 hover:underline text-sm"
->
-  View Details
-</Link>
+                to={`/product/${product._id}`}
+                title={`View details for ${product.name}`}
+                className="block mt-4 text-blue-600 hover:underline text-sm"
+              >
+                View Details
+              </Link>
               {user?.role === 'buyer' && (
                 <div className="mt-4 space-y-2">
                   <button

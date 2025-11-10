@@ -5,10 +5,12 @@ function SellerAnalytics() {
   const { token } = useContext(AuthContext);
   const [stats, setStats] = useState(null);
 
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const res = await fetch('/api/seller/analytics', {
+        const res = await fetch(`${API_BASE_URL}/api/seller/analytics`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
@@ -18,9 +20,10 @@ function SellerAnalytics() {
       }
     };
     fetchStats();
-  }, [token]);
+  }, [token, API_BASE_URL]);
 
-  if (!stats) return <p className="px-4 py-8 text-gray-600 dark:text-gray-300">Loading analytics...</p>;
+  if (!stats)
+    return <p className="px-4 py-8 text-gray-600 dark:text-gray-300">Loading analytics...</p>;
 
   return (
     <div className="min-h-screen px-4 py-8">

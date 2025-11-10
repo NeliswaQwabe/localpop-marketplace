@@ -6,10 +6,12 @@ function BuyerOrders() {
   const { token, user } = useContext(AuthContext);
   const [orders, setOrders] = useState([]);
 
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const res = await fetch('/api/purchase/buyer-orders', {
+        const res = await fetch(`${API_BASE_URL}/api/purchase/buyer-orders`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
@@ -20,7 +22,7 @@ function BuyerOrders() {
     };
 
     if (user?.role === 'buyer') fetchOrders();
-  }, [token, user]);
+  }, [token, user, API_BASE_URL]);
 
   return (
     <div className="min-h-screen px-4 py-8">

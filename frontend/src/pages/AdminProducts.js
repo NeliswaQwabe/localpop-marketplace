@@ -8,10 +8,12 @@ function AdminProducts() {
   const [flagId, setFlagId] = useState('');
   const [flagReason, setFlagReason] = useState('');
 
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch('/api/admin/products', {
+        const res = await fetch(`${API_BASE_URL}/api/admin/products`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
@@ -22,12 +24,12 @@ function AdminProducts() {
       }
     };
     fetchProducts();
-  }, [token]);
+  }, [token, API_BASE_URL]);
 
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this product?')) return;
     try {
-      const res = await fetch(`/api/admin/products/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/admin/products/${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -45,7 +47,7 @@ function AdminProducts() {
   const handleFlag = async () => {
     if (!flagReason.trim()) return alert('Please enter a reason.');
     try {
-      const res = await fetch(`/api/admin/products/${flagId}/flag`, {
+      const res = await fetch(`${API_BASE_URL}/api/admin/products/${flagId}/flag`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

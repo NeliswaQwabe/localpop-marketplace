@@ -11,12 +11,14 @@ function SellerDashboard() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
 
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
   useEffect(() => {
     if (!token || !user?.role || user.role !== 'seller') return;
 
     const fetchAll = async () => {
       try {
-        const res = await fetch('/api/products/my-products', {
+        const res = await fetch(`${API_BASE_URL}/api/products/my-products`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
@@ -26,7 +28,7 @@ function SellerDashboard() {
       }
 
       try {
-        const res = await fetch('/api/seller/stats', {
+        const res = await fetch(`${API_BASE_URL}/api/seller/stats`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
@@ -37,7 +39,7 @@ function SellerDashboard() {
       }
 
       try {
-        const res = await fetch('/api/purchase/seller-orders', {
+        const res = await fetch(`${API_BASE_URL}/api/purchase/seller-orders`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
@@ -50,12 +52,12 @@ function SellerDashboard() {
     };
 
     fetchAll();
-  }, [token, user]);
+  }, [token, user, API_BASE_URL]);
 
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this product?')) return;
     try {
-      const res = await fetch(`/api/products/delete/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/products/delete/${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -73,7 +75,7 @@ function SellerDashboard() {
 
   const updateStatus = async (id, status) => {
     try {
-      const res = await fetch(`/api/purchase/status/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/purchase/status/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
