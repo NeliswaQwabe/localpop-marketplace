@@ -15,9 +15,9 @@ LocalPop is a community-powered marketplace connecting local farmers and buyers.
 - Frontend: React, Tailwind CSS
 - Backend: Node.js, Express
 - Database: MongoDB Atlas
-- Payments: Payfast (simulated)
+- Payments: Payfast (simulated, still waiting for Payfast to accept my applicaion for merchand ID)
 - Email: Nodemailer + Gmail App Password
-
+  LIVE LINK: https://localpop-marketplace.vercel.app/
 ## 🚀 Setup
 
 ### Backend
@@ -25,3 +25,4 @@ LocalPop is a community-powered marketplace connecting local farmers and buyers.
 ```bash
 cd backend
 npm install
+
